@@ -18,16 +18,16 @@ Rulp::log_level = Logger::DEBUG
 
 given[
 
-X_i >= 0,
-Y_i >= 0,
-Z_i >= 0
+X_lpi >= 0,
+Y_lpi >= 0,
+Z_lpi >= 0
 
 ]
 
-Rulp::Max( objective = 10 * X_i + 6 * Y_i + 4 * Z_i ) [
-                            X_i +     Y_i +     Z_i <= 100,
-                       10 * X_i + 4 * Y_i + 5 * Z_i <= 600,
-                       2 *  X_i + 2 * Y_i + 6 * Z_i <= 300
+Rulp::Max( objective = 10 * X_lpi + 6 * Y_lpi + 4 * Z_lpi ) [
+                            X_lpi +     Y_lpi +     Z_lpi <= 100,
+                       10 * X_lpi + 4 * Y_lpi + 5 * Z_lpi <= 600,
+                       2 *  X_lpi + 2 * Y_lpi + 6 * Z_lpi <= 300
 ].cbc
 
 result = objective.evaluate
@@ -36,7 +36,7 @@ result = objective.evaluate
 # 'result' is the result of the objective function.
 # You can retrieve the values of variables by using the 'value' method
 # E.g
-#   X_i.value == 32
-#   Y_i.value == 67
-#   Z_i.value == 0
+#   X_lpi.value == 32
+#   Y_lpi.value == 67
+#   Z_lpi.value == 0
 ##

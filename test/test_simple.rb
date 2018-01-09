@@ -13,12 +13,12 @@ require_relative 'test_helper'
 
 class SimpleTest < Minitest::Test
   def setup
-    given[ X_i >= 0,  Y_i >= 0,  Z_i >= 0 ]
-    @objective = 10 * X_i + 6 * Y_i + 4 * Z_i
+    given[ X_lpi >= 0,  Y_lpi >= 0,  Z_lpi >= 0 ]
+    @objective = 10 * X_lpi + 6 * Y_lpi + 4 * Z_lpi
     @problem   = Rulp::Max( @objective ) [
-                    X_i +     Y_i +     Z_i <= 100,
-               10 * X_i + 4 * Y_i + 5 * Z_i <= 600,
-               2 *  X_i + 2 * Y_i + 6 * Z_i <= 300
+                    X_lpi +     Y_lpi +     Z_lpi <= 100,
+               10 * X_lpi + 4 * Y_lpi + 5 * Z_lpi <= 600,
+               2 *  X_lpi + 2 * Y_lpi + 6 * Z_lpi <= 300
     ]
   end
 
@@ -26,9 +26,9 @@ class SimpleTest < Minitest::Test
     each_solver do |solver|
       setup
       @problem.send(solver)
-      assert_equal X_i.value, 33
-      assert_equal Y_i.value, 67
-      assert_equal Z_i.value, 0
+      assert_equal X_lpi.value, 33
+      assert_equal Y_lpi.value, 67
+      assert_equal Z_lpi.value, 0
       assert_equal @objective.evaluate , 732
     end
   end

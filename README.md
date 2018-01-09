@@ -59,25 +59,25 @@ Rulp is inspired by the ruby wrapper for the GLPK toolkit and the python LP libr
 
 	given[
 
-	X_i >= 0,
-	Y_i >= 0,
-	Z_i >= 0
+	X_lpi >= 0,
+	Y_lpi >= 0,
+	Z_lpi >= 0
 
 	]
 
-	result = Rulp::Max( 10 * X_i + 6 * Y_i + 4 * Z_i ) [
-	                X_i +     Y_i +     Z_i <= 100,
-	           10 * X_i + 4 * Y_i + 5 * Z_i <= 600,
-	           2 *  X_i + 2 * Y_i + 6 * Z_i <= 300
+	result = Rulp::Max( 10 * X_lpi + 6 * Y_lpi + 4 * Z_lpi ) [
+	                X_lpi +     Y_lpi +     Z_lpi <= 100,
+	           10 * X_lpi + 4 * Y_lpi + 5 * Z_lpi <= 600,
+	           2 *  X_lpi + 2 * Y_lpi + 6 * Z_lpi <= 300
 	].solve
 
 	##
 	# 'result' is the result of the objective function.
 	# You can retrieve the values of variables by using the 'value' method
 	# E.g
-	#   X_i.value == 32
-	#   Y_i.value == 67
-	#   Z_i.value == 0
+	#   X_lpi.value == 32
+	#   Y_lpi.value == 67
+	#   Z_lpi.value == 0
 	##
 ```
 
@@ -189,18 +189,18 @@ At this point, you should have GLPK installed. Verify it:
 	# need to initialize them.
 	# They follow a naming convention that defines their type.
 	# A variable is declared as a constant with one of three different suffixes.
-	# 'f' or '_f' indicates a general variable (No constraints)
-	# 'i' or '_i' indicates a integer variable
-	# 'b' or '_b' indicates a binary/boolean variable
+	# 'lpf' or '_lpf' indicates a general variable (No constraints)
+	# 'lpi' or '_lpi' indicates a integer variable
+	# 'lpb' or '_lpb' indicates a binary/boolean variable
 
 
-	An_Integer_i
+	An_Integer_lpi
 	=> #<IV:0x007ffc4b651b80 @name="An_Integer">
 
-	Generalf
+	Generallpf
 	=> #<LV:0x007ffc4b651b80 @name="General">
 
-	Bool_Val_b
+	Bool_Val_lpb
 	=> #<BV:0x007ffc4b67b6b0 @name="Bool_Val">
 
 	# In some cases it is implausible to generate a unique name for every possible variable
@@ -209,13 +209,13 @@ At this point, you should have GLPK installed. Verify it:
 	# accept index parameters to create large ranges of unique variables.
 	# Examples of how indexed variables can be declared are as follows:
 
-	Item_i(4,5)
+	Item_lpi(4,5)
 	#<IV:0x007ffc4b3ea518 @name="Item4_5">
 
-	Item_i("store_3", "table_2")
+	Item_lpi("store_3", "table_2")
 	#<IV:0x007ffc4b3a3cd0 @name="Itemstore_3_table_2">
 
-	[*0..10].map(&Unit_f)
+	[*0..10].map(&Unit_lpf)
 	=> [#<LV:0x007ffc4cc25768 @name="Unit0">,
 	 #<LV:0x007ffc4cc24cf0 @name="Unit1">,
 	 #<LV:0x007ffc4cc0fc88 @name="Unit2">,
@@ -237,16 +237,16 @@ Constraints on a variable can only use numeric literals and not other variables.
 Inter-variable constraints should be expressed as problem constrants. (Explained below.)
 
 ```ruby
-	X_i < 5
-	X_i.bounds
+	X_lpi < 5
+	X_lpi.bounds
 	=> "X <= 5"
 
-	3 <= X_i < 15
+	3 <= X_lpi < 15
 	X_i.bounds
 	=> "3 <= X <= 15"
 
-	Y_f == 10
-	Y_f.bounds
+	Y_lpf == 10
+	Y_lpf.bounds
 	=> "y = 10"
 ```
 
@@ -255,14 +255,14 @@ Inter-variable constraints should be expressed as problem constrants. (Explained
 Constraints are added to a problem using the :[] syntax.
 
 ```ruby
-	problem = Rulp::Max( 10 * X_i + 6 * Y_i + 4 * Z_i )
+	problem = Rulp::Max( 10 * X_lpi + 6 * Y_lpi + 4 * Z_lpi )
 
 	problem[
-		X_i +     Y_i +     Z_i <= 100
+		X_lpi +     Y_lpi +     Z_lpi <= 100
 	]
 
 	problem[
-		10 * X_i + 4 * Y_i + 5 * Z_i <= 600
+		10 * X_lpi + 4 * Y_lpi + 5 * Z_lpi <= 600
 	]
 	...
 	problem.solve
@@ -271,10 +271,10 @@ Constraints are added to a problem using the :[] syntax.
 You can add multiple constraints at once by comma separating them as seen in the earlier examples:
 
 ```ruby
-	Rulp::Max( 10 * X_i + 6 * Y_i + 4 * Z_i ) [
-		                X_i +     Y_i +     Z_i <= 100,
-		           10 * X_i + 4 * Y_i + 5 * Z_i <= 600,
-		           2 *  X_i + 2 * Y_i + 6 * Z_i <= 300
+	Rulp::Max( 10 * X_lpi + 6 * Y_lpi + 4 * Z_lpi ) [
+		                X_lpi +     Y_lpi +     Z_lpi <= 100,
+		           10 * X_lpi + 4 * Y_lpi + 5 * Z_lpi <= 600,
+		           2 *  X_lpi + 2 * Y_lpi + 6 * Z_lpi <= 300
 		          ]
 ```
 
@@ -288,10 +288,10 @@ such that the command `which [exec_name]` returns a path. (I.e they must be on y
 Given a problem there are multiple ways to initiate a solver.
 
 ```ruby
-	@problem = Rulp::Max( 10 * X_i + 6 * Y_i + 4 * Z_i ) [
-	                 X_i +     Y_i +     Z_i <= 100,
-	           	10 * X_i + 4 * Y_i + 5 * Z_i <= 600,
-	           	2 *  X_i + 2 * Y_i + 6 * Z_i <= 300
+	@problem = Rulp::Max( 10 * X_lpi + 6 * Y_lpi + 4 * Z_lpi ) [
+	                 X_lpi +     Y_lpi +     Z_lpi <= 100,
+	           	10 * X_lpi + 4 * Y_lpi + 5 * Z_lpi <= 600,
+	           	2 *  X_lpi + 2 * Y_lpi + 6 * Z_lpi <= 300
 						]
 ```
 
@@ -410,13 +410,13 @@ You can then play with and attempt LP and MIP problems straight from the command
 
 ```ruby
 
-	[1] pry(main)> 13 <= X_i <= 45 # Declare integer variable
+	[1] pry(main)> 13 <= X_lpi <= 45 # Declare integer variable
 	=> X(i)[undefined]
 
-	[2] pry(main)> -15 <= Y_f <= 15 # Declare float variable
+	[2] pry(main)> -15 <= Y_lpf <= 15 # Declare float variable
 	=> Y(f)[undefined]
 
-	[3] pry(main)> @problem = Rulp::Min(X_i - Y_f) # Create min problem
+	[3] pry(main)> @problem = Rulp::Min(X_lpi - Y_lpf) # Create min problem
 	[info] Creating minimization problem
 	=>
 	Minimize
@@ -430,7 +430,7 @@ You can then play with and attempt LP and MIP problems straight from the command
 	 X
 	End
 
-	[4] @problem[ X_i - 2 * Y_f < 40] #Adding a problem constraint
+	[4] @problem[ X_lpi - 2 * Y_lpf < 40] #Adding a problem constraint
 	=>
 	Minimize
 	 obj: X -Y
@@ -450,10 +450,10 @@ You can then play with and attempt LP and MIP problems straight from the command
 	[info] Parsing result
 	=> -2.0 #(Minimal result)
 
-	[6] pry(main)> Y_f # See value calculated for Y now that solver has run
+	[6] pry(main)> Y_lpf # See value calculated for Y now that solver has run
 	=> Y(f)[15.0]
 
-	[8] pry(main)> X_i
+	[8] pry(main)> X_lpi
 	=> X(i)[13.0]
 
 	# The result of the objective function (-2.0) was returned by the call to .solve
@@ -461,10 +461,10 @@ You can then play with and attempt LP and MIP problems straight from the command
 	# objective function (or any function) by calling evaluate on it.
 	# E.g
 
-	[9] (X_i - Y_f).evaluate
+	[9] (X_lpi - Y_lpf).evaluate
 	=> -2.0
 
-	[10] pry(main)> (2 * X_i + 15 * Y_f).evaluate
+	[10] pry(main)> (2 * X_lpi + 15 * Y_lpf).evaluate
 	=> 251.0
 ```
 
@@ -481,7 +481,7 @@ we don't. We can't partially purchase one.)
 ```ruby
 # Generate the data randomly for this example.
 costs, points = [*0..1000].map do |i|
-	[Purchase_b(i) * Random.rand(1.0..3.0), Purchase_b(i) * Random.rand(5.0..10.0)]
+	[Purchase_lpb(i) * Random.rand(1.0..3.0), Purchase_lpb(i) * Random.rand(5.0..10.0)]
 end.transpose.map(&:sum) #We sum the array of points and array of costs to create a Rulp expression
 
 # And this is where the magic happens!. We ask rulp to maximise the number of points given
@@ -493,7 +493,7 @@ Rulp::Max(points)[
 => 538.2125623353652 (# You will get a different value as data was generated randomly)
 
 # Now how do we check which purchases were selected?
-selected_purchases = [*0..1000].map(&Purchase_b).select(&:selected?)
+selected_purchases = [*0..1000].map(&Purchase_lpb).select(&:selected?)
 
 => [Purchase27(b)[true],
  Purchase86(b)[true],
