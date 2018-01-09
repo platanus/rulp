@@ -7,11 +7,11 @@
 # This is similar to the syntax defined in the object extensions but allows for numbered
 # suffixes to quickly generate ranges of similar variables.
 #
-# Where lp var type suffix is either _b for binary, _i for integer, or _f for float.
+# Where lp var type suffix is either _lpb for binary, _lpi for integer, or _lpf for float.
 # I.e
 #
-# Rating_i(5) is the equivalent of Rating_5 (type integer)
-# Is_happy_b(2) is the equivalent of Is_happy_2 (type binary/boolean)
+# Rating_lpi(5) is the equivalent of Rating_5 (type integer)
+# Is_happy_lpb(2) is the equivalent of Is_happy_2 (type binary/boolean)
 # ...
 ##
 module Kernel
@@ -20,15 +20,15 @@ module Kernel
     method_name = "#{value}" rescue ""
     start = method_name[0]
     if (start <= "Z" && start >= "A")
-      case method_name[-1]
-      when "b"
-        method_name = method_name[0..(method_name[-2] == "_" ? -3 : -2)]
+      case method_name[-3..-1]
+      when "lpb"
+        method_name = method_name[0..(method_name[-4] == "_" ? -5 : -4)]
         return BV.definition(method_name, args)
-      when "i"
-        method_name = method_name[0..(method_name[-2] == "_" ? -3 : -2)]
+      when "lpi"
+        method_name = method_name[0..(method_name[-4] == "_" ? -5 : -4)]
         return IV.definition(method_name, args)
-      when "f"
-        method_name = method_name[0..(method_name[-2] == "_" ? -3 : -2)]
+      when "lpf"
+        method_name = method_name[0..(method_name[-4] == "_" ? -5 : -4)]
         return LV.definition(method_name, args)
       end
     end

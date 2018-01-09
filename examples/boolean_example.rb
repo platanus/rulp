@@ -9,7 +9,7 @@ Rulp::log_level = Logger::INFO
 #
 ##
 
-items       = 50.times.map(&Shop_Item_b)
+items       = 50.times.map(&Shop_Item_lpb)
 items_count = items.sum
 items_costs = items.map{|item| item * Random.rand(1.0...5.0)}.sum
 
@@ -25,5 +25,5 @@ puts items.map(&:inspect)
 # 'cost' is the result of the objective function.
 # You can retrieve allocations by querying the variables.
 # E.g
-#   Shop_Item_b(4).value
+#   Shop_Item_lpb(4).value
 ##

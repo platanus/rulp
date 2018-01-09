@@ -7,7 +7,7 @@ require_relative 'test_helper'
 ##
 class BooleanTest < Minitest::Test
   def setup
-    @items       = 30.times.map(&Shop_Item_b)
+    @items       = 30.times.map(&Shop_Item_lpb)
     items_count = @items.sum
     @items_costs = @items.map{|item| item * Random.rand(1.0...5.0)}.sum
 

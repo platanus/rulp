@@ -22,7 +22,7 @@ class LV
   end
 
   def suffix
-    "f"
+    "lpf"
   end
 
   def self.definition(name, *args)
@@ -75,11 +75,11 @@ end
 
 class BV < LV;
   def suffix
-    "b"
+    "lpb"
   end
 end
 class IV < LV;
   def suffix
-    "i"
+    "lpi"
   end
 end
